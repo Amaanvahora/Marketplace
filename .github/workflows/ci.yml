@@ -23,7 +23,6 @@ jobs:
 
     - name: Boot up Hardhat local network
       run: npx hardhat node &
-      background: true
 
     - name: Deploy Smart Contracts
       run: npx hardhat run src/backend/scripts/deploy.js --network localhost
