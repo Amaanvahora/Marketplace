@@ -1,5 +1,4 @@
 # NFT Marketplace
-# Testing
 
 ## Technology Stack & Tools
 
