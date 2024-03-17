@@ -1,4 +1,30 @@
-- run:
-    name: Setup Google Cloud
-    command: |
-      echo $GCLOUD_SERVICE_KEY | gcloud auth activate-service-account --key-file=-
+version: 2.1
+jobs:
+  build-and-push:
+    docker:
+      - image: google/cloud-sdk:latest
+    steps:
+      - checkout
+      - run:
+          name: Authenticate with GCP
+          command: |
+            echo $GCLOUD_SERVICE_KEY | gcloud auth activate-service-account --key-file=-
+      - run:
+          name: Configure GCP Project and Compute Zone
+          command: |
+            gcloud --quiet config set project theta-turbine-417512
+            gcloud --quiet config set compute/zone us-central1-a
+      - run:
+          name: Configure Docker to use the gcloud command-line tool as a credential helper
+          command: gcloud auth configure-docker
+      - run:
+          name: Build and Push Docker image
+          command: |
+            docker build -t gcr.io/theta-turbine-417512/nft-marketplace:$CIRCLE_SHA1 .
+            docker push gcr.io/theta-turbine-417512/nft-marketplace:$CIRCLE_SHA1
+
+workflows:
+  version: 2
+  build-deploy:
+    jobs:
+      - build-and-push
