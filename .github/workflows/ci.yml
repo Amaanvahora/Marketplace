@@ -1,0 +1,32 @@
+name: NFT Marketplace CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v1
+      with:
+        node-version: '16' # Specify your project's Node.js version
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Boot up Hardhat local network
+      run: npx hardhat node &
+      background: true
+
+    - name: Deploy Smart Contracts
+      run: npx hardhat run src/backend/scripts/deploy.js --network localhost
+
+    - name: Run tests
+      run: npx hardhat test
