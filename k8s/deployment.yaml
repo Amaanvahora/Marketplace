@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nft-marketplace-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nft-marketplace
+  template:
+    metadata:
+      labels:
+        app: nft-marketplace
+    spec:
+      containers:
+      - name: nft-marketplace-container
+        image: gcr.io/theta-turbine-417512/nft-marketplace:fdd5f73ec3916c7f22c6ea67f68e4cc6a4d6a7ac
+        ports:
+        - containerPort: 80

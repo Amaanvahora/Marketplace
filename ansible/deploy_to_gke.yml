@@ -1,0 +1,22 @@
+---
+- name: Deploy Application to GKE
+  hosts: localhost
+  gather_facts: no
+  vars:
+    project_id: "theta-turbine-417512"
+    gke_cluster_name: "nft-marketplace-cluster"
+    gke_cluster_zone: "us-central1"
+    deployment_path: "/mnt/e/Projects/Marketplace/Marketplace/k8s/deployment.yaml"
+    service_path: "/mnt/e/Projects/Marketplace/Marketplace/k8s/service.yaml"
+  
+  tasks:
+    - name: Authenticate with Google Cloud
+      command: gcloud auth activate-service-account --key-file=/mnt/e/Projects/Marketplace/Marketplace/theta-turbine-417512-2aa4a7243d0b.json
+
+    - name: Get GKE Cluster Credentials
+      command: gcloud container clusters get-credentials {{ gke_cluster_name }} --zone {{ gke_cluster_zone }} --project {{ project_id }}
+
+    - name: Apply Kubernetes Deployment
+      command: kubectl apply -f /mnt/e/Projects/Marketplace/Marketplace/k8s/deployment.yaml
+    - name: Apply Kubernetes Service
+      command: kubectl apply -f /mnt/e/Projects/Marketplace/Marketplace/k8s/service.yaml
