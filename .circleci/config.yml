@@ -3,7 +3,7 @@ version: 2.1
 jobs:
   build-and-push-image:
     docker:
-      - image: google/cloud-sdk:latest # This image has `gcloud` installed
+      - image: google/cloud-sdk:latest 
     steps:
       - checkout
       - setup_remote_docker:
